@@ -9,13 +9,38 @@
 | you a convenient way to create models for testing and seeding your
 | database. Just tell the factory how a default model should look.
 |
-*/
+ */
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
+        'name'           => $faker->name,
+        'email'          => $faker->email,
+        'password'       => bcrypt(str_random(10)),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(App\Branch::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+    ];
+});
+
+$factory->define(App\Permission::class, function (Faker\Generator $faker) {
+    $name = $faker->name;
+
+    return [
+        'name'     => $name,
+        'slug'     => str_slug($name),
+        'comments' => $faker->sentence,
+    ];
+});
+
+$factory->define(App\Role::class, function (Faker\Generator $faker) {
+    $name = $faker->name;
+
+    return [
+        'name' => $name,
+        'slug' => str_slug($name),
     ];
 });

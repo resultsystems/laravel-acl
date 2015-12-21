@@ -39,6 +39,23 @@ CanResetPasswordContract
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'branch_group');
+        return $this->belongsToMany(Branch::class, 'groups')->withPivot(['role_id']);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, "role_user");
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, "permission_user");
+    }
+
+    public function permissionsByFilialId($id)
+    {
+        return $this->branches(function ($query) use ($id) {
+            $query->where("id", $id);
+        });
     }
 }

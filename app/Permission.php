@@ -15,9 +15,4 @@ class Permission extends Model
     {
         return $this->belongsToMany(User::class);
     }
-
-    public function branches()
-    {
-        return $this->belongsToMany(Branch::class, 'branch_group');
-    }
 }

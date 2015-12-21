@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePermissionRoleTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,25 @@ class CreatePermissionRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('permission_role', function (Blueprint $table) {
-            $table->integer('role_id')
+        Schema::create('groups', function (Blueprint $table) {
+            $table->integer("branch_id")
                 ->unsigned();
-            $table->integer('permission_id')
+            $table->integer("role_id")
+                ->unsigned();
+            $table->integer("user_id")
                 ->unsigned();
 
+            $table->foreign("branch_id")
+                ->references("id")
+                ->on("branches")
+                ->onDelete("CASCADE");
             $table->foreign("role_id")
                 ->references("id")
                 ->on("roles")
-                ->onDelete('CASCADE');
-            $table->foreign("permission_id")
+                ->onDelete("CASCADE");
+            $table->foreign("user_id")
                 ->references("id")
-                ->on("permissions")
+                ->on("users")
                 ->onDelete("CASCADE");
         });
     }
@@ -36,6 +42,6 @@ class CreatePermissionRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('permission_role');
+        Schema::drop("groups");
     }
 }
