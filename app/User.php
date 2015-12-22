@@ -37,6 +37,11 @@ CanResetPasswordContract
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * Pegas as filiais
+     *
+     * @return Collection
+     */
     public function branches()
     {
         return $this->belongsToMany(Branch::class, 'groups')
@@ -44,28 +49,39 @@ CanResetPasswordContract
             ->with('roles.permissions');
     }
 
+    /**
+     * Pega as Roles
+     *
+     * @return Collection
+     */
     public function roles()
     {
         return $this->belongsToMany(Role::class, "role_user");
     }
 
+    /**
+     * Pega as permissões
+     *
+     * @return Collection
+     */
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, "permission_user");
     }
 
     /**
-     * Verifica se o usuário tem a permissão :permission
+     * Verifica se o usuário tem a(s) permissão(ões) :permission
      *
      * Caso seja passado uma branch (filial)
      * Será verificado as permissões apenas nesta branch
      *
      * @param  string  $permission
+     * @param  bool    $any
      * @param  int     $branch_id
      *
      * @return boolean
      */
-    public function hasPermission($permission, $branch_id = null)
+    public function hasPermission($checkPermissions, $any = true, $branch_id = null)
     {
         $user_id = $this->id;
         $user    = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
@@ -77,14 +93,14 @@ CanResetPasswordContract
         }, "roles.permissions", "permissions"])->where("id", $this->id)->first();
 
         if ($branch_id) {
-            return $this->checkPermissionByBranches($user->branches, $branch_id, $permission);
+            return $this->checkPermissionsByBranches($user->branches, $branch_id, $checkPermissions, $any);
         }
 
-        if ($this->checkPermission($user->permissions, $permission)) {
+        if ($this->checkPermissions($user->permissions, $checkPermissions, $any)) {
             return true;
         }
 
-        if ($this->checkPermissionInRoles($user->roles, $permission)) {
+        if ($this->checkPermissionsInRoles($user->roles, $checkPermissions, $any)) {
             return true;
         }
 
@@ -92,22 +108,23 @@ CanResetPasswordContract
     }
 
     /**
-     * Verifica se o usuário tem a permissão :permission na branch :branch_id
+     * Verifica se o usuário tem a(s) permissão(ões) :checkPermissions na branch :branch_id
      *
-     * @param  array  $branches
-     * @param  int    $branch_id
-     * @param  string $permission
+     * @param  array         $branches
+     * @param  int           $branch_id
+     * @param  array|string  $checkPermissions
+     * @param  bool          $any
      *
      * @return bool
      */
-    private function checkPermissionByBranches($branches, $branch_id, $permission)
+    private function checkPermissionsByBranches($branches, $branch_id, $checkPermissions, $any)
     {
         foreach ($branches as $branch) {
             if ($branch->id != $branch_id) {
-                echo "Filial: " . $branch->id . "<br><br>";
                 continue;
             }
-            if ($this->checkPermissionInRoles($branch->roles, $permission)) {
+
+            if ($this->checkPermissionsInRoles($branch->roles, $checkPermissions, $any)) {
                 return true;
             }
         }
@@ -116,18 +133,19 @@ CanResetPasswordContract
     }
 
     /**
-     * Verifica se o usuário tem a permissão :permission
+     * Verifica se o usuário tem a(s) permissão(ões) :checkPermissions
      * Dentro de de alguma das roles :roles
      *
-     * @param  array  $roles
-     * @param  string $permission
+     * @param  array        $roles
+     * @param  array|string $checkPermissions
+     * @param  bool          $any
      *
      * @return bool
      */
-    private function checkPermissionInRoles($roles, $permission)
+    private function checkPermissionsInRoles($roles, $checkPermissions, $any)
     {
         foreach ($roles as $role) {
-            if ($this->checkPermission($role->permissions, $permission)) {
+            if ($this->checkPermissions($role->permissions, $checkPermissions, $any)) {
                 return true;
             }
         }
@@ -136,22 +154,35 @@ CanResetPasswordContract
     }
 
     /**
-     * Checka se a permissão :permission
+     * Checka se a(s) permissão(ões) :checkPermissions
      * Está em :permissions
      *
-     * @param  array  $permissions
-     * @param  string $permission
+     * @param  array        $permissions
+     * @param  array|string $checkPermissions
+     * @param  bool         $any
      *
      * @return bool
      */
-    private function checkPermission($permissions, $permission)
+    private function checkPermissions($permissions, $checkPermissions, $any)
     {
-        foreach ($permissions as $p) {
-            if ($p->slug == $permission) {
-                return true;
+        if (!is_array($checkPermissions)) {
+            $checkPermissions = array($checkPermissions);
+        }
+        $hasPermission = false;
+        foreach ($checkPermissions as $permission) {
+            $hasPermission = false;
+
+            foreach ($permissions as $p) {
+                if ($p->slug == $permission) {
+                    if ($any) {
+                        return true;
+                    }
+                    $hasPermission = true;
+                    continue 2;
+                }
             }
         }
 
-        return false;
+        return $hasPermission;
     }
 }
