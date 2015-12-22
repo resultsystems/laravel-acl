@@ -61,8 +61,51 @@ CanResetPasswordContract
         });
     }
 
-    public function hasPermission($permission, $branch = null)
+    public function hasPermission($permission, $branch_id = null)
     {
-//
+        $user = $this->with(['branches.roles' => function ($query) {
+            $query->where("id", "=", 1);
+        }, "roles.permissions", "permissions"])->where("id", $this->id)->first();
+        if ($this->checkPermission($user->permissions, $permission)) {
+            return true;
+        }
+
+        if ($this->checkPermissionInRoles($user->roles, $permission)) {
+            return true;
+        }
+
+        if (is_null($branch_id)) {
+            return false;
+        }
+
+        foreach ($user->branches as $branch) {
+            if ($this->checkPermissionInRoles($branch->roles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function checkPermissionInRoles($roles, $permission)
+    {
+        foreach ($roles as $role) {
+            if ($this->checkPermission($role->permissions, $permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function checkPermission($permissions, $permission)
+    {
+        foreach ($permissions as $p) {
+            if ($p->slug == $permission) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -11,17 +11,14 @@
 |
  */
 Route::get('/', function () {
-    $user = \App\User::with(['branches.roles' => function ($query) {
-        $query->where("id", "=", 1);
-    }, "roles.permissions", "permissions"])->first();
-    echo "<pre>";
+    $user = \App\User::first();
 
-    if (!is_null($user)) {
-        print_r($user->toArray());
+    for ($i = 1; $i <= 30; $i++) {
+        echo "Permissão: " . $i . ": ";
+        if ($user->hasPermission('permission.' . $i)) {
+            echo "[ok]<br><br>";
+        } else {
+            echo "<br><br>";
+        }
     }
-
-    echo "</pre>";
-    exit;
-
-    return $user;
 });

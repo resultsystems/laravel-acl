@@ -34,14 +34,14 @@ class DatabaseSeeder extends Seeder
             $user->roles()->attach($role->id);
             $permissions = Permission::all()->random(5);
             foreach ($permissions as $permission) {
-                $user->permissions()->attach($permission);
+                $user->permissions()->attach($permission->id);
             }
-            $roles = Role::all();
-            foreach ($roles as $role) {
-                $permissions = Permission::all()->random(10);
-                foreach ($permissions as $permission) {
-                    $role->permissions()->attach($permission);
-                }
+        }
+        $roles = Role::all();
+        foreach ($roles as $role) {
+            $permissions = Permission::all()->random(rand(3, 8));
+            foreach ($permissions as $permission) {
+                $role->permissions()->attach($permission->id);
             }
         }
         // $this->call(UserTableSeeder::class);
