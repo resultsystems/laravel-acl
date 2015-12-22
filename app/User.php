@@ -54,13 +54,17 @@ CanResetPasswordContract
         return $this->belongsToMany(Permission::class, "permission_user");
     }
 
-    public function permissionsByBranchId($id)
-    {
-        return $this->branches(function ($query) use ($id) {
-            $query->where("id", $id);
-        });
-    }
-
+    /**
+     * Verifica se o usuário tem a permissão :permission
+     *
+     * Caso seja passado uma branch (filial)
+     * Será verificado as permissões apenas nesta branch
+     *
+     * @param  string  $permission
+     * @param  int     $branch_id
+     *
+     * @return boolean
+     */
     public function hasPermission($permission, $branch_id = null)
     {
         $user_id = $this->id;
@@ -87,6 +91,15 @@ CanResetPasswordContract
         return false;
     }
 
+    /**
+     * Verifica se o usuário tem a permissão :permission na branch :branch_id
+     *
+     * @param  array  $branches
+     * @param  int    $branch_id
+     * @param  string $permission
+     *
+     * @return bool
+     */
     private function checkPermissionByBranches($branches, $branch_id, $permission)
     {
         foreach ($branches as $branch) {
@@ -102,6 +115,15 @@ CanResetPasswordContract
         return false;
     }
 
+    /**
+     * Verifica se o usuário tem a permissão :permission
+     * Dentro de de alguma das roles :roles
+     *
+     * @param  array  $roles
+     * @param  string $permission
+     *
+     * @return bool
+     */
     private function checkPermissionInRoles($roles, $permission)
     {
         foreach ($roles as $role) {
@@ -113,6 +135,15 @@ CanResetPasswordContract
         return false;
     }
 
+    /**
+     * Checka se a permissão :permission
+     * Está em :permissions
+     *
+     * @param  array  $permissions
+     * @param  string $permission
+     *
+     * @return bool
+     */
     private function checkPermission($permissions, $permission)
     {
         foreach ($permissions as $p) {
