@@ -39,7 +39,9 @@ CanResetPasswordContract
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'groups')->withPivot(['role_id']);
+        return $this->belongsToMany(Branch::class, 'groups')
+            ->withPivot(['role_id'])
+            ->with('roles.permissions');
     }
 
     public function roles()
@@ -52,10 +54,15 @@ CanResetPasswordContract
         return $this->belongsToMany(Permission::class, "permission_user");
     }
 
-    public function permissionsByFilialId($id)
+    public function permissionsByBranchId($id)
     {
         return $this->branches(function ($query) use ($id) {
             $query->where("id", $id);
         });
+    }
+
+    public function hasPermission($permission, $branch = null)
+    {
+//
     }
 }

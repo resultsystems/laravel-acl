@@ -10,13 +10,16 @@
 | and give it the controller to call when that URI is requested.
 |
  */
-
 Route::get('/', function () {
     $user = \App\User::with(['branches.roles' => function ($query) {
         $query->where("id", "=", 1);
-    }])->first();
+    }, "roles.permissions", "permissions"])->first();
     echo "<pre>";
-    print_r($user->toArray());
+
+    if (!is_null($user)) {
+        print_r($user->toArray());
+    }
+
     echo "</pre>";
     exit;
 
