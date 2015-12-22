@@ -35,3 +35,18 @@
 
 #Helpers
     A pensar
+
+
+==== novas ideias
+Pensando no uso do defender, acrescentar estas duas tabelas:
+tenant: {id, name}
+role_tenant: (tenant_id, role_id, user_id);
+
+eu preciso checar a filial atual que o cara está, blz isso.
+filial_atual e user_id está em (role_tenant)? sim:
+    role_id tem a permissao X? sim:
+    allow:
+    Não:
+    deny
+
+
