@@ -1,27 +1,37 @@
-## Laravel PHP Framework
+# Ideia do projeto
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+##IDEIA DA NECESSIDADE:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+##Usuário logar no sistema, e o sistema vai checar as permissões dele.
+###Tipos de checagem:
+    Permissões por usuário (Permissions);
+    Papeis (Roles);
+    Filiais (Branches);
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+###Usuário pode ter permissão de criar contas na filial 1, porém na filial 2 só pode visualizar.
 
-## Official Documentation
+##IDEIA DA ACL:
+    A ideia é ser algo mais amplo para poder ser reaproveitado em vários lugares.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+    Então o usuário poderá ter permissões cadastradas para ele (permissions && users -> permission_user):
+    Poderá fazer parte de papeis (roles && users -> role_user)
+    Poderá fazer parte de filiais (branches && roles && users -> groups)
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+###IDEIA PARA CHECAR PERMISSÕES:
+    $user->hasPermission('permissão'); -> Checa se o usuário tem a permissão X,
+    tanto diretamente por ele, ou em alguma role que ele faz parte.
 
-## Security Vulnerabilities
+    $user->hasPermission(['permissão1', 'permissão2'], true);->Checa se o usuário tem as permissões
+    Se o segundo parâmetro for verdadeiro, verifica se tem uma ou outra permissão, se for falta exigir que
+    tenha acesso a todas as permissões
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+    $user->hasPermission(['permissão1', 'permissão2'], false, 1); -> o Terceiro parametro é a branch (filial),
+    caso ele seja informado, verificar se o usuário tem permissão naquela filial específica,
+    (desprezando, se ele tem diretamente ligado a ele a permissão, isso pode ser mudado no futuro).
 
-### License
+#Middleware
+    A pensar
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+#Helpers
+    A pensar
