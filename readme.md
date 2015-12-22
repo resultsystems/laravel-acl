@@ -49,4 +49,6 @@ filial_atual e user_id está em (role_tenant)? sim:
     Não:
     deny
 
-
+if (canDo('post-update')) {
+    return $post->filial_id==$user->hasPermissionByFilial('post-update', $post->filial_id);
+}
