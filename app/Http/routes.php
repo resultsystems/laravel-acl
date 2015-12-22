@@ -15,7 +15,7 @@ Route::get('/', function () {
 
     for ($i = 1; $i <= 30; $i++) {
         echo "Permissão: " . $i . ": ";
-        if ($user->hasPermission('permission.' . $i)) {
+        if ($user->hasPermission('permission.' . $i, 1)) {
             echo "[ok]<br><br>";
         } else {
             echo "<br><br>";

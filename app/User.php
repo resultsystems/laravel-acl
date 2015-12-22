@@ -63,9 +63,19 @@ CanResetPasswordContract
 
     public function hasPermission($permission, $branch_id = null)
     {
-        $user = $this->with(['branches.roles' => function ($query) {
-            $query->where("id", "=", 1);
+        $user_id = $this->id;
+        $user    = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
+            $query
+                ->where("id", "=", $branch_id)
+                ->with(['roles' => function ($q) use ($user_id) {
+                    $q->where("user_id", "=", $user_id);
+                }]);
         }, "roles.permissions", "permissions"])->where("id", $this->id)->first();
+
+        if ($branch_id) {
+            return $this->checkPermissionByBranches($user->branches, $branch_id, $permission);
+        }
+
         if ($this->checkPermission($user->permissions, $permission)) {
             return true;
         }
@@ -74,12 +84,17 @@ CanResetPasswordContract
             return true;
         }
 
-        if (is_null($branch_id)) {
-            return false;
-        }
+        return false;
+    }
 
-        foreach ($user->branches as $branch) {
-            if ($this->checkPermissionInRoles($branch->roles)) {
+    private function checkPermissionByBranches($branches, $branch_id, $permission)
+    {
+        foreach ($branches as $branch) {
+            if ($branch->id != $branch_id) {
+                echo "Filial: " . $branch->id . "<br><br>";
+                continue;
+            }
+            if ($this->checkPermissionInRoles($branch->roles, $permission)) {
                 return true;
             }
         }
