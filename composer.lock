@@ -4,9 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c6026b96e6fa11a641b51a6ba976f5e",
-    "content-hash": "5bd58fd976f1ee3e9611bc37c006ec46",
+    "hash": "167da1399f9a02899809d19d7d74a1ad",
+    "content-hash": "bd2cb431808759a3189bad333499c093",
     "packages": [
+        {
+            "name": "artesaos/defender",
+            "version": "v0.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artesaos/defender.git",
+                "reference": "6768f25bd53b05a6d8b3c53b04896a7ef4f1f60c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artesaos/defender/zipball/6768f25bd53b05a6d8b3c53b04896a7ef4f1f60c",
+                "reference": "6768f25bd53b05a6d8b3c53b04896a7ef4f1f60c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "~5.1",
+                "illuminate/database": "~5.1",
+                "illuminate/http": "~5.1",
+                "illuminate/support": "~5.1",
+                "illuminate/view": "~5.1",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "~2.0",
+                "fzaninotto/faker": "~1.5",
+                "orchestra/testbench": "~3.0",
+                "phpspec/phpspec": "~2.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Artesaos\\Defender\\": "src/Defender/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreo Vieira",
+                    "email": "andreoav@gmail.com"
+                },
+                {
+                    "name": "Vagner do Carmo",
+                    "email": "vluzrmos@gmail.com"
+                },
+                {
+                    "name": "Luiz Vinicius Reis",
+                    "email": "luiz.vinicius73@gmail.com"
+                }
+            ],
+            "description": "Roles & Permissions for Laravel 5",
+            "time": "2015-10-21 13:55:08"
+        },
         {
             "name": "classpreloader/classpreloader",
             "version": "3.0.0",

@@ -52,3 +52,19 @@ filial_atual e user_id está em (role_tenant)? sim:
 if (canDo('post-update')) {
     return $post->filial_id==$user->hasPermissionByFilial('post-update', $post->filial_id);
 }
+
+======================
+permissions : {id, name, slug}
+roles       : {id, name, slug}
+tenants     : {id, name}
+
+permission_role : {permission_id, role_id}
+role_user       : {role_id, user_id}
+
+tenant_user     : {tenant_id, user_id, role_id}
+
+"tenant->hasUser(user_id)"
+user->hasTenant(tenant_id)
+    ->hasPermission...
+
+

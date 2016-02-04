@@ -168,6 +168,7 @@ CanResetPasswordContract
         if (!is_array($checkPermissions)) {
             $checkPermissions = array($checkPermissions);
         }
+
         $hasPermission = false;
         foreach ($checkPermissions as $permission) {
             $hasPermission = false;
