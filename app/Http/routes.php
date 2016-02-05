@@ -11,12 +11,32 @@
 |
  */
 Route::get('/', function () {
+    //dd($collection->every(4, 1));
     $user = \App\User::first();
-    if ($user->hasPermission(['permission.23', 'permission.24'], false)) {
-        echo "ok<br>";
+    $p1 = 'permission.2';
+    $p2 = 'permission.7';
+    if ($user->hasPermission($p1)) {
+        echo 'p1 ok<br>';
     } else {
-        echo "não ok<br>";
+        echo 'sem p1<br>';
     }
+    if ($user->hasPermission($p2)) {
+        echo 'p2 ok<br>';
+    } else {
+        echo 'sem p2<br>';
+    }
+
+    if ($user->hasPermission([$p1, $p2], false)) {
+        echo "p1 e p2 ok any=false<br>";
+    } else {
+        echo "sem permissão p1 e p2 any=false<br>";
+    }
+    if ($user->hasPermission([$p1, $p2], true)) {
+        echo "p1 e p2 ok any=true<br>";
+    } else {
+        echo "sem permissão p1 e p2 any=true<br>";
+    }
+    echo '<br>';
 
     for ($i = 1; $i <= 30; $i++) {
         echo "Permissão: " . $i . ": ";

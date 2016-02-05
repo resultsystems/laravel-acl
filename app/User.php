@@ -84,14 +84,22 @@ CanResetPasswordContract
     public function hasPermission($checkPermissions, $any = true, $branch_id = null)
     {
         $user_id = $this->id;
-        $user    = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
+
+        $user = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
             $query
-                ->where("id", "=", $branch_id)
                 ->with(['roles' => function ($q) use ($user_id) {
                     $q->where("user_id", "=", $user_id);
                 }]);
-        }, "roles.permissions", "permissions"])->where("id", $this->id)->first();
-
+            if (!is_null($branch_id)) {
+                $query
+                    ->where("id", "=", $branch_id);
+            }
+        }, "roles.permissions",
+            "permissions" => function ($query) {
+                $query->select("slug");
+            }])
+            ->where("id", $this->id)
+            ->first();
         if ($branch_id) {
             return $this->checkPermissionsByBranches($user->branches, $branch_id, $checkPermissions, $any);
         }
@@ -169,21 +177,25 @@ CanResetPasswordContract
             $checkPermissions = array($checkPermissions);
         }
 
-        $hasPermission = false;
-        foreach ($checkPermissions as $permission) {
-            $hasPermission = false;
+        $filtered = [];
+        foreach ($permissions as $item) {
+            $filtered[] = $item->slug;
+        }
 
-            foreach ($permissions as $p) {
-                if ($p->slug == $permission) {
-                    if ($any) {
-                        return true;
-                    }
-                    $hasPermission = true;
-                    continue 2;
-                }
+        $total = 0;
+        foreach ($checkPermissions as $permission) {
+            $has = in_array($permission, $filtered);
+            if ($has and $any) {
+                return true;
+            }
+            if (!$has and !$any) {
+                return false;
+            }
+            if ($has) {
+                $total++;
             }
         }
 
-        return $hasPermission;
+        return $total == count($filtered);
     }
 }
