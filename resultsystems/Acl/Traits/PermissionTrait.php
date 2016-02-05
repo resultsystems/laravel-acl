@@ -167,6 +167,6 @@ trait PermissionTrait
             }
         }
 
-        return $total == count($filtered);
+        return $total == count($checkPermissions);
     }
 }

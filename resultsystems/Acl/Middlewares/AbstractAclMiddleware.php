@@ -55,7 +55,7 @@ abstract class AbstractAclMiddleware
     {
         $routeActions = $this->getActions($request);
 
-        return (int) array_get($routeActions, 'branch_id', null);
+        return (int) array_get($routeActions, 'branch_id', 0);
     }
 
     /**

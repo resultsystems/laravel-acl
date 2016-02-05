@@ -13,7 +13,7 @@
 Auth::loginUsingId(1);
 Route::get('/2', ['middleware' => ['auth', 'needsPermission'],
     'permission'               => 'permission.7',
-    'any'                      => true,
+    'any'                      => false,
     'branch_id'                => 2,
     function () {
         dd('Tenho permissão');
