@@ -68,8 +68,17 @@ trait PermissionTrait
             "permissions" => function ($query) {
                 $query->select("slug");
             }])
-            ->where("id", $this->id)
-            ->first();
+            ->where("id", $this->id);
+        if ($branch_id) {
+            $user = $user->whereHas("branches", function ($query) use ($branch_id) {
+                $query->where('id', '=', $branch_id);
+            });
+        }
+        $user = $user->first();
+
+        if (is_null($user)) {
+            return false;
+        }
 
         if ($branch_id) {
             return $this->checkPermissionsByBranches($user->branches, $branch_id, $checkPermissions, $any);
@@ -103,9 +112,7 @@ trait PermissionTrait
                 continue;
             }
 
-            if ($this->checkPermissionsInRoles($branch->roles, $checkPermissions, $any)) {
-                return true;
-            }
+            return $this->checkPermissionsInRoles($branch->roles, $checkPermissions, $any);
         }
 
         return false;
@@ -124,9 +131,7 @@ trait PermissionTrait
     private function checkPermissionsInRoles($roles, $checkPermissions, $any)
     {
         foreach ($roles as $role) {
-            if ($this->checkPermissions($role->permissions, $checkPermissions, $any)) {
-                return true;
-            }
+            return $this->checkPermissions($role->permissions, $checkPermissions, $any);
         }
 
         return false;

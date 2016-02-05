@@ -43,6 +43,12 @@ class NeedsPermissionMiddleware extends AbstractAclMiddleware
         return $next($request);
     }
 
+    /**
+     * Transforma uma string em boolean
+     *
+     * @param  string $value
+     * @return bool
+     */
     public function getBool($value)
     {
         return ($value !== "false" and $value !== 0 and $value !== "0");
