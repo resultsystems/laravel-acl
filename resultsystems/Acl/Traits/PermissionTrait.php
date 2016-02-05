@@ -55,8 +55,7 @@ trait PermissionTrait
     public function hasPermission($checkPermissions, $any = true, $branch_id = null)
     {
         $user_id = $this->id;
-
-        $user = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
+        $user    = $this->with(['branches' => function ($query) use ($branch_id, $user_id) {
             $query
                 ->with(['roles' => function ($q) use ($user_id) {
                     $q->where("user_id", "=", $user_id);
@@ -71,6 +70,7 @@ trait PermissionTrait
             }])
             ->where("id", $this->id)
             ->first();
+
         if ($branch_id) {
             return $this->checkPermissionsByBranches($user->branches, $branch_id, $checkPermissions, $any);
         }

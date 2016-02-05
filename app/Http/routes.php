@@ -10,44 +10,55 @@
 | and give it the controller to call when that URI is requested.
 |
  */
-Route::get('/', function () {
-    //dd($collection->every(4, 1));
-    $user = \App\User::where('id', 1)->first();
-    $p1 = 'permission.2';
-    $p2 = 'permission.7';
-    if ($user->hasPermission($p1)) {
-        echo 'p1 ok<br>';
-    } else {
-        echo 'sem p1<br>';
-    }
-    if ($user->hasPermission($p2)) {
-        echo 'p2 ok<br>';
-    } else {
-        echo 'sem p2<br>';
-    }
+Auth::loginUsingId(1);
+Route::get('/2', ['middleware' => ['auth', 'needsPermission'],
+    'permission'               => 'permission.7',
+    'any'                      => true,
+    'branch_id'                => 2,
+    function () {
+        dd('Tenho permissão');
+    }]);
 
-    if ($user->hasPermission([$p1, $p2], false)) {
-        echo "p1 e p2 ok any=false<br>";
-    } else {
-        echo "sem permissão p1 e p2 any=false<br>";
-    }
-    if ($user->hasPermission([$p1, $p2], true)) {
-        echo "p1 e p2 ok any=true<br>";
-    } else {
-        echo "sem permissão p1 e p2 any=true<br>";
-    }
-    echo '<br>';
+Route::get('/', [
+    'middleware' => ['auth', 'needsPermission:permission.1|1'],
+    function () {
+        dd('Tenho permissão');
+        $user = Auth::user();
+        $p1 = 'permission.2';
+        $p2 = 'permission.7';
+        if ($user->hasPermission($p1)) {
+            echo 'p1 ok<br>';
+        } else {
+            echo 'sem p1<br>';
+        }
+        if ($user->hasPermission($p2)) {
+            echo 'p2 ok<br>';
+        } else {
+            echo 'sem p2<br>';
+        }
 
-    for ($i = 1; $i <= 30; $i++) {
-        echo "Permissão: " . $i . ": ";
-        if ($user->hasPermission('permission.' . $i, true, 1)) {
-            echo "[ok]";
+        if ($user->hasPermission([$p1, $p2], false)) {
+            echo "p1 e p2 ok any=false<br>";
+        } else {
+            echo "sem permissão p1 e p2 any=false<br>";
         }
-        echo "<br>";
-        echo "Permissão: " . $i . ": ";
-        if ($user->hasPermission('permission.' . $i)) {
-            echo "[ok]";
+        if ($user->hasPermission([$p1, $p2], true)) {
+            echo "p1 e p2 ok any=true<br>";
+        } else {
+            echo "sem permissão p1 e p2 any=true<br>";
         }
-        echo "<br>";
-    }
-});
+        echo '<br>';
+
+        for ($i = 1; $i <= 30; $i++) {
+            echo "Permissão: " . $i . ": ";
+            if ($user->hasPermission('permission.' . $i, true, 1)) {
+                echo "[ok]";
+            }
+            echo "<br>";
+            echo "Permissão: " . $i . ": ";
+            if ($user->hasPermission('permission.' . $i)) {
+                echo "[ok]";
+            }
+            echo "<br>";
+        }
+    }]);
