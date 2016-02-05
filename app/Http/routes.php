@@ -12,7 +12,7 @@
  */
 Route::get('/', function () {
     //dd($collection->every(4, 1));
-    $user = \App\User::first();
+    $user = \App\User::where('id', 1)->first();
     $p1 = 'permission.2';
     $p2 = 'permission.7';
     if ($user->hasPermission($p1)) {

@@ -17,7 +17,6 @@
     Poderá fazer parte de papeis (roles && users -> role_user)
     Poderá fazer parte de filiais (branches && roles && users -> groups)
 
-
 ###IDEIA PARA CHECAR PERMISSÕES:
     $user->hasPermission('permissão'); -> Checa se o usuário tem a permissão X,
     tanto diretamente por ele, ou em alguma role que ele faz parte.
