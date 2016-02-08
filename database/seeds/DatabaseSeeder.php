@@ -1,11 +1,11 @@
 <?php
 
-use App\Branch;
-use App\Permission;
-use App\Role;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use ResultSystems\Acl\Branch;
+use ResultSystems\Acl\Permission;
+use ResultSystems\Acl\Role;
 
 class DatabaseSeeder extends Seeder
 {

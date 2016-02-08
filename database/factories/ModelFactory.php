@@ -20,13 +20,13 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Branch::class, function (Faker\Generator $faker) {
+$factory->define(ResultSystems\Acl\Branch::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
     ];
 });
 
-$factory->define(App\Permission::class, function (Faker\Generator $faker) {
+$factory->define(ResultSystems\Acl\Permission::class, function (Faker\Generator $faker) {
     $name = $faker->name;
 
     return [
@@ -36,7 +36,7 @@ $factory->define(App\Permission::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Role::class, function (Faker\Generator $faker) {
+$factory->define(ResultSystems\Acl\Role::class, function (Faker\Generator $faker) {
     $name = $faker->name;
 
     return [
