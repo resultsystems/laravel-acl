@@ -67,3 +67,6 @@ user->hasTenant(tenant_id)
     ->hasPermission...
 
 
+##Publicar config e migrates
+php artisan vendor:publish --provider="ResultSystems\Acl\AclServiceProvider"
+

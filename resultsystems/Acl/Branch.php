@@ -8,18 +8,11 @@ class Branch extends Model
 {
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'groups');
-        //->wherePivot('type', 'reminder_customer');
-        //->wherePivot('branch', 'reminder_customer');
+        return $this->belongsToMany(Role::class, 'branch_role');
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'groups');
-    }
-
-    public function groups()
-    {
-        return $this->hasManyThrough(Role::class, User::class);
+        return $this->belongsToMany(User::class, 'branch_role');
     }
 }

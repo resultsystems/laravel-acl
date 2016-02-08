@@ -15,7 +15,7 @@ trait PermissionTrait
      */
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'groups')
+        return $this->belongsToMany(Branch::class, 'branch_role')
             ->withPivot(['role_id'])
             ->with(['roles' => function ($query) {
                 $query
@@ -24,7 +24,7 @@ trait PermissionTrait
                             ->where('allow', '=', true)
                             ->where(function ($qq) {
                                 $qq
-                                    ->where('expires', '<=', date('Y-m-d H:i:s'))
+                                    ->where('expires', '>=', date('Y-m-d H:i:s'))
                                     ->where('expires', 'IS', 'NULL', 'OR');
                             });
                     }]);
@@ -83,7 +83,7 @@ trait PermissionTrait
                             ->where('allow', '=', true)
                             ->where(function ($qq) {
                                 $qq
-                                    ->where('expires', '<=', date('Y-m-d H:i:s'))
+                                    ->where('expires', '>=', date('Y-m-d H:i:s'))
                                     ->where('expires', 'IS', 'NULL', 'OR');
                             });
                     }]);

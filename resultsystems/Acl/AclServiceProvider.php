@@ -26,7 +26,7 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function registerBindings()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../Resources/acl.php', 'acl');
+        $this->mergeConfigFrom(__DIR__ . '/Resources/acl.php', 'acl');
     }
 
     /**
@@ -35,7 +35,7 @@ class AclServiceProvider extends ServiceProvider
     protected function publishStorehouseConfiguration()
     {
         $this->publishes([
-            __DIR__ . '/../Resources/acl.php' => config_path('acl.php'),
+            __DIR__ . '/Resources/acl.php' => config_path('acl.php'),
         ], 'config');
     }
 
@@ -44,7 +44,7 @@ class AclServiceProvider extends ServiceProvider
      */
     private function publishMigrations()
     {
-        $this->publishes([__DIR__ . '/../Resources/migrations/' => base_path('database/migrations')], 'migrations');
+        $this->publishes([__DIR__ . '/Resources/migrations/' => base_path('database/migrations')], 'migrations');
     }
 
     /**
