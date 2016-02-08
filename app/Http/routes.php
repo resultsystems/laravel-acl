@@ -1,5 +1,14 @@
 <?php
-
+/*
+DB::listen(function ($query) {
+print_r($query);
+echo "<Br>";
+echo "<Br>";
+// $query->sql
+// $query->bindings
+// $query->time
+});
+//*/
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,7 +21,7 @@
  */
 Auth::loginUsingId(1);
 Route::get('/2', ['middleware' => ['auth', 'needsPermission'],
-    'permission'               => 'permission.11',
+    'permission'               => ['permission.11', 'permission.12'],
     'any'                      => false,
     'branch_id'                => 1,
     function () {
