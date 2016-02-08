@@ -70,3 +70,30 @@ user->hasTenant(tenant_id)
 ##Publicar config e migrates
 php artisan vendor:publish --provider="ResultSystems\Acl\AclServiceProvider"
 
+
+
+#Como usar nas rotas
+```
+Route::get('/path', ['middleware' => ['auth', 'needsPermission'],
+    'permission'               => ['permission.11', 'permission.12'],
+    'any'                      => false, //any=true (qualquer permissão) (opcional)
+    'branch_id'                => 1, // Empreas/filial (opcional)
+    function () {
+        dd('Tenho permissão');
+    }]);
+```
+
+```
+Route::get('/path', [
+    'middleware' => ['auth', 'needsPermission:permission.5|permission.10,true,5'],
+
+    function () {
+        dd('Tenho permissão');
+    }]);
+
+    //needsPermission=middleware
+    //permission.5=permissão 5
+    //permission.10=permissão 10
+    //any=true (qualquer permissão) (opcional)
+    //1=Filial/Empresa (opcional)
+```

@@ -23,7 +23,7 @@ Auth::loginUsingId(1);
 Route::get('/2', ['middleware' => ['auth', 'needsPermission'],
     'permission'               => ['permission.11', 'permission.12'],
     'any'                      => false,
-    'branch_id'                => 1,
+    'branch_id'                => 2,
     function () {
         dd('Tenho permissão');
     }]);
@@ -31,7 +31,7 @@ Route::get('/2', ['middleware' => ['auth', 'needsPermission'],
 Route::get('/',
     function () {
         $user = Auth::user();
-        $p1 = 'permission.2';
+        $p1 = 'permission.9';
         $p2 = 'permission.7';
         if ($user->hasPermission($p1)) {
             echo 'p1 ok<br>';
@@ -71,7 +71,7 @@ Route::get('/',
     });
 
 Route::get('/3', [
-    'middleware' => ['auth', 'needsPermission:permission.5|1'],
+    'middleware' => ['auth', 'needsPermission:permission.5|permission.5,false,3'],
     function () {
         dd('Tenho permissão');
     }]);
